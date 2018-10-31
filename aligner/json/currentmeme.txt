@@ -1,0 +1,12 @@
+{
+    "imgurl": "http://quantumart.org/maps/duality/uploader/images/image2.png",
+    "topimages": [
+        {
+            "url": "http://quantumart.org/maps/duality/uploader/images/image1.png",
+            "xoverw": 0.13980263157894737,
+            "yoverw": 0.13157894736842105,
+            "woverw": 0.7756578947368421,
+            "angle": 0
+        }
+    ]
+}

@@ -1,0 +1,21 @@
+{
+    "imgurl": "http://localhost:8000/curve/svg/svg1540400168.svg",
+    "topimages": [
+        {
+            "url": "http://localhost:8000/symbol/svg/svg1539822302.svg",
+            "xoverw": 0.6400709219858156,
+            "yoverw": 0.16170212765957448,
+            "woverw": 0.14184397163120568,
+            "angle": 0,
+            "href": ""
+        },
+        {
+            "url": "http://localhost:8000/symbol/svg/svg1539822302.svg",
+            "xoverw": 0.4787234042553192,
+            "yoverw": 0.6723404255319149,
+            "woverw": 0.14184397163120568,
+            "angle": 180.642,
+            "href": "../../"
+        }
+    ]
+}

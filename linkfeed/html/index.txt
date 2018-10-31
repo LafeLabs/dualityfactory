@@ -1,0 +1,72 @@
+<script>
+
+document.getElementById("leftfeed").style.display = "block";
+document.getElementById("leftfeed").style.left = "30%";
+document.getElementById("inputtable").style.display = "block";
+document.getElementById("deletebutton").style.display = "block";
+document.getElementById("tableinput").style.width = "30em";
+document.getElementById("inputlabel").innerHTML = "INPUT URL:";
+document.getElementById("inputlabel").className = "button";
+
+document.getElementById("tableinput").select();
+
+if(document.getElementById("linkdatadiv").innerHTML.length > 0){
+    linkdata = JSON.parse(document.getElementById("linkdatadiv").innerHTML);        
+}
+else{
+    linkdata = [];
+}
+linkIndex = 0;
+
+init();
+function init(){
+    document.getElementById("leftfeed").innerHTML = "";
+    for(var index = 0;index < linkdata.length;index++){
+        var newa = document.createElement("A");
+        newa.href = linkdata[index];
+        newa.innerHTML = linkdata[index];
+        var newp = document.createElement("p");
+        newp.appendChild(newa);
+        document.getElementById("leftfeed").appendChild(newp);
+    }
+}
+
+
+document.getElementById("tableinput").onchange = function(){
+    linkdata.push(this.value);
+    var newa = document.createElement("A");
+    newa.href = document.getElementById("tableinput").value;
+    newa.innerHTML = document.getElementById("tableinput").value;
+    var newp = document.createElement("p");
+    newp.appendChild(newa);
+    document.getElementById("leftfeed").appendChild(newp);
+    data = encodeURIComponent(JSON.stringify(linkdata,null, "    "));
+    var httpc = new XMLHttpRequest();
+    var url = "filesaver.php";        
+    httpc.open("POST", url, true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+    httpc.send("data="+data+"&filename=json/linklist.txt");//send text to filesaver.php
+}
+document.getElementById("inputlabel").onclick = function(){
+    linkdata.push(document.getElementById("tableinput").value);
+    var newa = document.createElement("A");
+    newa.href = document.getElementById("tableinput").value;
+    newa.innerHTML = document.getElementById("tableinput").value;
+    var newp = document.createElement("p");
+    newp.appendChild(newa);
+    document.getElementById("leftfeed").appendChild(newp);
+    data = encodeURIComponent(JSON.stringify(linkdata,null, "    "));
+    var httpc = new XMLHttpRequest();
+    var url = "filesaver.php";        
+    httpc.open("POST", url, true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+    httpc.send("data="+data+"&filename=json/linklist.txt");//send text to filesaver.php
+}
+
+document.getElementById("deletebutton").onclick = function(){
+    linkdata = [];
+    document.getElementById("tableinput").value = "";
+    document.getElementById("leftfeed").innerHTML = "";
+}
+
+</script>

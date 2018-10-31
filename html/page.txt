@@ -1,0 +1,253 @@
+<div id = "navbar">
+    <img src = "../symbols/diamond.svg" id = "topdiamond"/>
+
+    <table id = "linktable">
+        <tr>
+            <td>
+                <a href = "editor.php">
+                    <img src = "../symbols/editor.svg"/>
+                </a>
+            </td>
+            <td>
+                <a href = "../uploader/">
+                    <img src = "../symbols/upload.svg"/>
+                </a>
+            </td>
+            <td>
+                <a href = "../combiner/">
+                    <img src = "../symbols/combiner2.svg"/>
+                </a>
+            </td>
+            <td>
+                <a href = "../aligner/">
+                    <img src = "../symbols/aligner.svg"/>
+                </a>
+            </td>
+            <td>
+                <a href = "../linkfeed/">
+                <img src = "../symbols/linkfeed.svg"/>
+                </a>
+            </td>
+            <td>
+                <a href = "../linker/">
+                <img src = "../symbols/linker.svg"/>
+                </a>
+            </td>
+            <td>
+                <a href = "../">
+                <img src = "../symbols/map.svg"/>
+                </a>
+            </td>
+            <td>
+                <a href = "../maps/">
+                <img src = "../symbols/replicator.svg"/>
+                </a>
+            </td>
+
+        </tr>
+    </table>
+</div>
+
+<div id = "centerbox">
+ <div id = "memebox">
+  <img id = "bottomimage"/>
+ </div>
+ <div class = "sidefeed" id = "leftfeed"></div>
+ <div class = "sidefeed" id = "rightfeed"></div>
+ <table id = "imagelinktable"></table>
+
+</div>
+
+<div id = "actionbar">
+ <div id = "scalebar" class = "slidebar">SCALE</div>
+ <div id = "rotatebar" class = "slidebar">ROTATE</div>
+ <table id = "inputtable">
+  <tr>
+    <td id = "inputlabel"></td>
+    <td><input id = "tableinput"/></td>
+  </tr>
+ </table>
+
+ <form id = "uploadform" style = "margin-top:10px" action="upload.php" method="post" enctype="multipart/form-data">
+    Select image to upload:
+        <input type="file" name="fileToUpload" id="fileToUpload">
+        <input type="submit" value="Upload Image" name="submit">
+ </form>
+
+
+ <img src = "../symbols/meme2map.svg" id = "publishbutton" class= "button"/>
+ <input id = "mapinput"/>
+ <img src = "../symbols/delete.svg" id = "deletebutton" class= "button"/>
+
+ <img src = "../symbols/mapfactory.svg" id = "bottomsign"/>
+
+</div>
+
+
+<style>
+body{
+    font-family:Helvetica;
+}
+#navbar{
+    position:absolute;
+    left:0px;
+    right:0px;
+    top:0px;
+    height:100px;
+    border-bottom:solid;
+    border-width:10px;
+    border-color:blue;
+    overflow:hidden;
+}
+#linktable{
+    border:solid;
+    margin:auto;
+    border-radius:10px;
+    margin-top:22px;
+}
+#linktable img{
+    height:50px;
+}
+#centerbox{
+    position:absolute;
+    left:0px;
+    right:0px;
+    top:110px;
+    bottom:110px;
+}
+#memebox{
+    position:absolute;
+    left:0px;
+    top:0px;
+    right:0px;
+    bottom:0px;
+}
+.topimage{
+    position:absolute;
+    z-index:1;
+    opacity:0.5;
+}
+#bottomimage{
+    position:absolute;
+    left:0px;
+    top:0px;
+    border-right:solid;
+    border-bottom:solid;
+    display:none;
+        opacity:0.5;
+
+}
+.sidefeed{
+    width:40%;
+    position:absolute;
+    top:0px;
+    bottom:0px;
+    overflow:scroll;
+    border:solid;
+    display:none;
+}
+.sidefeed img{
+    display:block;
+    width:75%;
+    margin:auto;
+}
+#leftfeed{
+    left:5%;
+}
+#rightfeed{
+    right:5%;
+}
+#imagelinktable{
+    position:absolute;
+    left:50%;
+    top:150px;
+}
+#actionbar{
+    position:absolute;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    height:100px;
+    text-align:center;
+    border-top:solid;
+    border-color:blue;
+    border-width:10px;
+    background-color:white;
+    z-index:99999999;
+}
+.slidebar{
+    position:absolute;
+    left:0px;
+    right:0px;
+    height:50px;
+    text-align:center;
+    border:solid;
+    font-size:40px;
+    overflow:hidden;
+    display:none;
+}
+#scalebar{
+    bottom:50px;
+}
+#rotatebar{
+    bottom:0px;
+}
+#deletebutton{
+    position:absolute;
+    right:0px;
+    bottom:0px;
+    width:60px;
+    height:60px;
+    z-index:99999999;
+    display:none;
+}
+#publishbutton{
+    position:absolute;
+    left:0px;
+    bottom:0px;
+    width:60px;
+    height:60px;
+    display:none;
+}
+#uploadform{
+    display:none;
+}
+#mapinput{
+    display:none;
+}
+#imagelinktable{
+    display:none;
+}
+#inputtable{
+    display:none;
+}
+.button{
+    cursor:pointer;
+    border-radius:5px;
+    text-align:center;
+}
+.button:active{
+    background-color:yellow;
+}
+#topdiamond{
+    position:absolute;
+    top:0px;
+    left:0px;
+    overflow:hidden;
+    height:20px;
+    width:100%;
+    z-index:-2;
+}
+#bottomsign{
+    position:absolute;
+    bottom:20px;
+    left:0px;
+    overflow:hidden;
+    height:20px;
+    width:100%;
+    z-index:-4;
+    opacity:0.3;    
+}
+
+</style>
+

@@ -1,0 +1,4 @@
+[
+    "http://quantumart.org/maps/duality/uploader/images/image2.png",
+    "http://quantumart.org/maps/duality/uploader/images/image1.png"
+]

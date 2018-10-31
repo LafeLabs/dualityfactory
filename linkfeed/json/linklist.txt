@@ -1,0 +1,6 @@
+[
+    "https://en.wikipedia.org/wiki/Major_General_Marquis_Gilbert_de_Lafayette",
+    "https://en.wikipedia.org/wiki/Rochambeau",
+    "http://lafelabs.org/factory/",
+    "http://lafelabs.org/factory/"
+]

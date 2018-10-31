@@ -1,0 +1,105 @@
+<a style = "position:absolute;left:0px;top:0px;z-index:4;" href = "factory.php"><img style = "width:50px" src = "http://quantumart.org/symbol/icons/factory.svg"/></a>
+
+<div id  = "controlsurface">
+ <div id = "centerbox">
+  <div id = "memebox">
+   <img id = "bottomimage"/>
+  </div>
+ </div>
+</div>
+<script>
+meme= JSON.parse(document.getElementById("datadiv").innerHTML);
+
+bottom = document.getElementById("bottomimage");
+
+document.getElementById("bottomimage").width = innerWidth;
+document.getElementById("bottomimage").src = meme.imgurl;
+document.getElementById("bottomimage").onload = function(){
+    aspectRatio = this.width/this.height;
+    if(this.height > (innerHeight)){
+        this.style.height = (innerHeight).toString() + "px";
+        this.style.width = (aspectRatio*(innerHeight)).toString() + "px";
+        imageWidth = aspectRatio*(innerHeight);
+    }
+    else{
+        imageWidth = innerWidth;
+    }
+    init();
+}
+function init(){
+    newimg = document.createElement("IMG");
+    document.getElementById("memebox").appendChild(newimg);
+    newimg.className = "topimage";
+    newimg.src = meme.topimages[0].url;
+    newimg.style.width = (meme.topimages[0].woverw*imageWidth).toString() + "px";
+    newimg.style.left = (meme.topimages[0].xoverw*imageWidth).toString() + "px";
+    newimg.style.top = (meme.topimages[0].yoverw*imageWidth).toString() + "px";
+    newimg.style.transform = "rotate(" + (meme.topimages[0].angle).toString() + "deg)";
+    newimg.onload = function(){
+             this.parentElement.style.height = (this.height).toString() + "px";
+    }
+    newimg.id= "top";
+}
+
+theta = Math.PI/4;
+A = Math.cos(theta)*Math.cos(theta);
+B = Math.sin(theta)*Math.sin(theta);
+
+mc = new Hammer(document.getElementById("controlsurface"));
+mc.on("panleft panright", function(ev) {
+    theta = ev.deltaX*Math.PI*2/200;
+    A = Math.cos(theta)*Math.cos(theta);
+    B = Math.sin(theta)*Math.sin(theta);
+    document.getElementById("top").style.opacity = A;
+    bottom.style.opacity = B;
+    
+});    
+</script>
+
+<style>
+body{
+    font-family:Helvetica;
+    overflow:hidden;
+}
+#centerbox{
+    position:absolute;
+    left:0px;
+    right:0px;
+    top:0px;
+    bottom:0px;
+}
+#memebox{
+    position:absolute;
+    left:0px;
+    top:0px;
+    right:0px;
+    bottom:0px;
+}
+.topimage{
+    position:absolute;
+    z-index:1;
+    left:0px;
+    top:0px;
+    width:100%;
+    opacity:0.5;
+}
+.boxlink{
+    position:absolute;
+    z-index:1;
+}
+#bottomimage{
+    position:absolute;
+    left:0px;
+    top:0px;
+    opacity:0.5;
+}
+#controlsurface{
+    position:absolute;
+    z-index:3;
+    left:0px;
+    right:0px;
+    top:0px;
+    bottom:0px;
+}
+</style>
+

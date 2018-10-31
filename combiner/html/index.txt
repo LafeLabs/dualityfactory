@@ -1,0 +1,167 @@
+<style>
+    .sidefeed img{
+        cursor:pointer;
+    }
+</style>
+<script>
+
+    document.getElementById("leftfeed").style.display = "block";
+    document.getElementById("rightfeed").style.display = "block";
+    document.getElementById("inputtable").style.display = "block";
+    document.getElementById("inputlabel").innerHTML = "External Vector Graphics Feed:";
+    
+    if(document.getElementById("externalurlsdiv").innerHTML.length > 1){
+        externalurls = JSON.parse(document.getElementById("externalurlsdiv").innerHTML);
+    }
+    else{
+        externalurls = [];
+    }
+
+    imagelist  = document.getElementById("listdiv").innerHTML.split(",");
+    for(var index = 0;index < imagelist.length;index++){
+        if(imagelist[index].length > 1){
+            var newimg = document.createElement("IMG");
+            newimg.src = "../uploader/images/" + imagelist[index];
+            document.getElementById("leftfeed").appendChild(newimg);
+            newimg.onclick = function(){
+                var newimg2 = document.createElement("img");
+                newimg2.src = this.src;
+                document.getElementById("rightfeed").appendChild(newimg2);
+                redraw();
+                newimg2.onclick = function(){
+                    document.getElementById("rightfeed").removeChild(this);
+                    redraw();
+                }
+            }
+        }
+    }   
+    
+    
+    if(document.getElementById("symbolsdatadiv").innerHTML.length > 1){
+        symbollist  = document.getElementById("symbolsdatadiv").innerHTML.split(",");
+        for(var index = 0;index < symbollist.length;index++){
+            if(symbollist[index].length > 1){
+                var newimg = document.createElement("IMG");
+                newimg.src = "../symbol/svg/" + symbollist[index];
+                document.getElementById("leftfeed").appendChild(newimg);
+                newimg.onclick = function(){
+                    var newimg2 = document.createElement("img");
+                    newimg2.src = this.src;
+                    document.getElementById("rightfeed").appendChild(newimg2);
+                    redraw();
+                    newimg2.onclick = function(){
+                        document.getElementById("rightfeed").removeChild(this);
+                        redraw();
+                    }
+                }
+            }
+        }   
+    }
+
+    if(document.getElementById("curvesdatadiv").innerHTML.length > 1){
+        symbollist  = document.getElementById("curvesdatadiv").innerHTML.split(",");
+        for(var index = 0;index < symbollist.length;index++){
+            if(symbollist[index].length > 1){
+                var newimg = document.createElement("IMG");
+                newimg.src = "../curve/svg/" + symbollist[index];
+                document.getElementById("leftfeed").appendChild(newimg);
+                newimg.onclick = function(){
+                    var newimg2 = document.createElement("img");
+                    newimg2.src = this.src;
+                    document.getElementById("rightfeed").appendChild(newimg2);
+                    redraw();
+                    newimg2.onclick = function(){
+                        document.getElementById("rightfeed").removeChild(this);
+                        redraw();
+                    }
+                }
+            }
+        }   
+    }
+
+    if(externalurls.length > 0){
+        for(var index = 0;index < externalurls.length;index++){
+            var newimg = document.createElement("IMG");
+            newimg.src = externalurls[index];
+            document.getElementById("leftfeed").appendChild(newimg);
+            newimg.onclick = function(){
+                var newimg2 = document.createElement("img");
+                newimg2.src = this.src;
+                document.getElementById("rightfeed").appendChild(newimg2);
+                redraw();
+                newimg2.onclick = function(){
+                    document.getElementById("rightfeed").removeChild(this);
+                    redraw();
+                }
+            }
+        }
+    }
+    
+    function redraw(){
+        currentFile = "json/imagelist.txt";
+        imagelist = [];
+        outimages = document.getElementById("rightfeed").getElementsByTagName("IMG");
+        for(var index = 0;index < outimages.length;index++){
+            imagelist.push(outimages[index].src);
+        }
+        data = encodeURIComponent(JSON.stringify(imagelist,null, "    "));
+        var httpc = new XMLHttpRequest();
+        var url = "filesaver.php";        
+        httpc.open("POST", url, true);
+        httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+        httpc.send("data="+data+"&filename="+currentFile);//send text to filesaver.php
+
+    }
+    
+    
+    document.getElementById("tableinput").onchange = function(){
+        //use fileloader.php to grab remote list file
+        //http://lafelabs.org/factory/symbol/   
+        //example: http://lafelabs.org/factory/symbol/  svg/list.txt
+        
+        //need to see if there is a ? in the url
+        subdir = false;
+        if(this.value.split("index.php?path=").length > 1){
+            currentFile = this.value.split("index.php?path=")[0] + "symbols/" + this.value.split("index.php?path=")[1] + "svg/list.txt";
+            symboldir = this.value.split("index.php?path=")[0] + "symbols/" + this.value.split("index.php?path=")[1] + "svg/";
+            subdir = true;
+        }
+        else{
+            currentFile = this.value + "svg/list.txt";
+            symboldir = this.value + "svg/";
+        }
+        var httpc = new XMLHttpRequest();
+        httpc.onreadystatechange = function() {
+            if (this.readyState == 4 && this.status == 200) {
+                filedata = this.responseText;
+                symbollist  = filedata.split(",");
+                for(var index = 0;index < symbollist.length;index++){
+                    if(symbollist[index].length > 1){
+                    var newimg = document.createElement("IMG");
+                    newimg.src = symboldir + symbollist[index];     
+                    var localimglist = document.getElementById("leftfeed").getElementsByTagName("IMG");
+                    document.getElementById("leftfeed").insertBefore(newimg,localimglist[0]);
+    //                document.getElementById("imagesfeed").appendChild(newimg);
+                    
+                    
+                    newimg.onclick = function(){
+                        var newimg2 = document.createElement("img");
+                        newimg2.src = this.src;
+                        document.getElementById("rightfeed").appendChild(newimg2);
+                        redraw();
+                        newimg2.onclick = function(){
+                            document.getElementById("rightfeed").removeChild(this);
+                            redraw();
+                        }
+                
+                    }
+
+                    }
+                }   
+    
+            }
+        };
+        httpc.open("GET", "fileloader.php?filename=" + currentFile, true);
+        httpc.send();
+    }
+</script>

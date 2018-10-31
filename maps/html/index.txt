@@ -1,0 +1,306 @@
+<div id = "navbar">
+    <table id = "linktable">
+        <tr>
+            <td>
+                <a href = "editor.php">
+                    <img src = "../symbols/editor.svg"/>
+                </a>
+            </td>
+            <td>
+                <a href = "../uploader/">
+                    <img src = "../symbols/upload.svg"/>
+                </a>
+            </td>
+            <td>
+                <a href = "../combiner/">
+                    <img src = "../symbols/combiner2.svg"/>
+                </a>
+            </td>
+            <td>
+                <a href = "../aligner/">
+                    <img src = "../symbols/aligner.svg"/>
+                </a>
+            </td>
+            <td>
+                <a href = "../linkfeed/">
+                <img src = "../symbols/linkfeed2.svg"/>
+                </a>
+            </td>
+            <td>
+                <a href = "../linker/">
+                <img src = "../symbols/linker.svg"/>
+                </a>
+            </td>
+            <td>
+                <a href = "../">
+                <img src = "../symbols/map.svg"/>
+                </a>
+            </td>
+            <td>
+                <a href = "../maps/">
+                <img src = "../symbols/replicator.svg"/>
+                </a>
+            </td>
+
+        </tr>
+    </table>
+</div>
+
+<div id = "centerbox">
+ <div id = "memebox">
+  <img id = "bottomimage"/>
+ </div>
+ <div class = "sidefeed" id = "leftfeed">
+          <p>
+         <a href = "../../">../../</a>
+     </p>
+
+<h2>Sub Maps:</h2>
+<ul id = "maplist">
+    
+</ul>
+
+ </div>
+ <div class = "sidefeed" id = "rightfeed">
+<h2>How to make your own Watershed Factory</h2>
+
+<p>To create your own instance of this software you need to create a free web hosting account, upload one program, then run that program and the code will all be copied over.  Then you can custommize it as you see fit, and show others how to replicate it.</p>
+
+<h2>Steps to copy the factory:</h2>
+<ol>
+    <li>
+            Get your free hosting account at <a href = "https://www.000webhost.com/">www.000webhost.com</a>.  They will try to get you to get the paid hosting, which you can do later if you want but to get started the free one is fine.  You have to choose a name for your site, but since this is decentralized, picking a catchy name is not important, just something you can easily write down.  It could even be nonsense, as long as it's easy to write down and remember.   
+    </li>
+    <li>Navigate to the part of 000webhost where you can upload files to your main web directory.  Create a new file by clicking the appropriate icon and name it replicator.php.</li>
+    <li>
+        Open replicator.php in the editor, again clicking the appropriate link in the 000webhost interface, and copy and paste the code in this box:
+        <textarea id = "replicatorcode"></textarea>
+                Then save that file and close it.
+    </li>
+    <li>
+        Navigate your browser to the location of your web address.  This is [your chosen site name].000webhostapp.com/.  You should see a listing of the files in your site, which is just replicator.php.  Click on it to run it, and wait, up to a couple minutes, while the files copy.  
+    </li>
+    <li>
+        After a minute or two you should see a link to "index.php".  Click on it.  You are now in your new instance of Watershed Factory.
+    </li>
+    <li>
+        DO NOT PUT ANYTHING SECRET, PROPRIETARY, PERSONAL, CLASSIFIED, PRIVATE OR OF ANY MONETARY VALUE ON HERE!  This system is based on a "disposable server" model.  That is, on the assumption that the number of web servers is already greater than the number of human minds, and that each server can have thousands of instances of software like this, meaning the number of instances is many thousands per human mind for all of humanity.  This changes how we think of information and ultimately renders moot what is known as "cybersecurity".  However for the time being, as you have information which does need to be protected, keep it off this network or expect it to be copied and destroyed.  
+    </li>
+</ol>
+     
+ </div>
+ <table id = "imagelinktable"></table>
+
+</div>
+
+<div id = "actionbar">
+
+ <table id = "inputtable">
+  <tr>
+    <td id = "inputlabel"></td>
+    <td><input id = "tableinput"/></td>
+    <td id = "publishbutton" class = "button">PUBLISH</td>
+  </tr>
+
+ </table>
+
+</div>
+
+
+
+
+<script>
+
+    document.getElementById("leftfeed").style.display = "block";
+    document.getElementById("rightfeed").style.display = "block";
+    document.getElementById("inputtable").style.display = "block";
+    document.getElementById("inputlabel").innerHTML = "Name of new sub map:";
+
+    dirarray = document.getElementById("listdiv").innerHTML.split(",");
+    for(var index = 0;index < dirarray.length;index++){
+        if(dirarray[index].length>0){
+            var newa = document.createElement("A");
+            newa.href = dirarray[index] + "/";
+            newa.innerHTML = dirarray[index] + "/";
+            var newli = document.createElement("LI");
+            newli.appendChild(newa);
+            document.getElementById("maplist").appendChild(newli);
+        }
+    }
+
+    currentFile = "../php/replicator.txt";
+    var httpc = new XMLHttpRequest();
+    httpc.onreadystatechange = function() {
+        if (this.readyState == 4 && this.status == 200) {
+            data = this.responseText;
+            document.getElementById("replicatorcode").value = data;
+        }
+    };
+    httpc.open("GET", "fileloader.php?filename=" + currentFile, true);
+    httpc.send();
+    
+        
+    document.getElementById("publishbutton").onclick = function(){
+        newmapname = document.getElementById("tableinput").value;
+        var httpc = new XMLHttpRequest();
+        httpc.open("GET", "makenewmap.php?filename=" + newmapname, true);
+        httpc.send();
+        var newa = document.createElement("A");
+        newa.href = newmapname + "/replicator.php";
+        newa.innerHTML = newmapname + "/replicator.php";
+        var newli = document.createElement("LI");
+        newli.appendChild(newa);
+        document.getElementById("maplist").appendChild(newli);
+    }
+</script>
+
+
+
+
+<style>
+h2{
+    width:100%;
+    text-align:center;
+}
+body{
+    font-family:Helvetica;
+}
+#navbar{
+    position:absolute;
+    left:0px;
+    right:0px;
+    top:0px;
+    height:100px;
+    border-bottom:solid;
+    border-width:10px;
+    border-color:blue;
+    overflow:hidden;
+}
+#linktable{
+    border:solid;
+    margin:auto;
+    border-radius:10px;
+}
+#linktable img{
+    height:50px;
+}
+#centerbox{
+    position:absolute;
+    left:0px;
+    right:0px;
+    top:110px;
+    bottom:110px;
+}
+#memebox{
+    position:absolute;
+    left:0px;
+    top:0px;
+    right:0px;
+    bottom:0px;
+}
+.topimage{
+    position:absolute;
+    z-index:1;
+}
+#bottomimage{
+    position:absolute;
+    left:0px;
+    top:0px;
+    border-right:solid;
+    border-bottom:solid;
+    display:none;
+}
+.sidefeed{
+    width:40%;
+    position:absolute;
+    top:0px;
+    bottom:0px;
+    overflow:scroll;
+    border:solid;
+    display:none;
+}
+.sidefeed img{
+    display:block;
+    width:75%;
+    margin:auto;
+}
+#leftfeed{
+    left:5%;
+}
+#rightfeed{
+    right:5%;
+}
+#imagelinktable{
+    position:absolute;
+    left:50%;
+    top:150px;
+}
+#actionbar{
+    position:absolute;
+    left:0px;
+    right:0px;
+    bottom:0px;
+    height:100px;
+    text-align:center;
+    border-top:solid;
+    border-color:blue;
+    border-width:10px;
+    background-color:white;
+}
+.slidebar{
+    position:absolute;
+    left:0px;
+    right:0px;
+    height:50px;
+    text-align:center;
+    border:solid;
+    font-size:40px;
+    overflow:hidden;
+    display:none;
+}
+#scalebar{
+    bottom:50px;
+}
+#rotatebar{
+    bottom:0px;
+}
+#deletebutton{
+    position:absolute;
+    right:0px;
+    bottom:0px;
+    width:60px;
+    height:60px;
+    display:none;
+}
+#uploadform{
+    display:none;
+}
+#mapinput{
+    display:none;
+}
+#imagelinktable{
+    display:none;
+}
+#inputtable{
+    display:none;
+}
+.button{
+    border:solid;
+    cursor:pointer;
+    border-radius:5px;
+    text-align:center;
+}
+.button:hover{
+    background-color:green;
+}
+.button:active{
+    background-color:yellow;
+}
+#replicatorcode{
+    display:block;
+    margin:auto;
+    width:80%;
+    height:35em;
+    font-family:courier;
+}
+</style>

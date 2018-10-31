@@ -1,0 +1,92 @@
+<script>
+
+    var newtd =  document.createElement("TD");
+    var newa = document.createElement("A");
+    var newimg = document.createElement("IMG");
+    newa.href = "markdownlinks.php";
+    newimg.src = "../symbols/markdown.svg";
+    newa.appendChild(newimg);
+    newtd.appendChild(newa);
+    document.getElementById("linktable").getElementsByTagName("TR")[0].appendChild(newtd);
+        
+    document.getElementById("uploadform").style.display = "block";
+    document.getElementById("inputtable").style.display = "block";
+    document.getElementById("leftfeed").style.display = "block";
+    document.getElementById("deletebutton").style.display = "block";
+    document.getElementById("leftfeed").style.left = "30%";
+    
+    if(document.getElementById("externalurlsdiv").innerHTML.length > 1){
+        externalurls = JSON.parse(document.getElementById("externalurlsdiv").innerHTML);
+    }
+    else{
+        externalurls = [];
+    }
+    document.getElementById("inputlabel").className = "button";
+    document.getElementById("inputlabel").innerHTML = "EXTERNAL IMAGE URL:";
+        imagenames = document.getElementById("listdiv").innerHTML.split(",");
+
+    localimages = [];
+    for(var index = 0;index < imagenames.length;index++){
+        if(imagenames[index].length> 2){
+            var newimg = document.createElement("IMG");
+            newimg.src = "images/" + imagenames[index];
+            document.getElementById("leftfeed").appendChild(newimg);
+            localimages.push(imagenames[index]);
+        }
+    }
+    for(var index = 0;index < externalurls.length;index++){
+        var newimg = document.createElement("IMG");
+        newimg.src = externalurls[index];
+        document.getElementById("leftfeed").appendChild(newimg);
+    }
+    
+    document.getElementById("deletebutton").onclick = function(){
+        if (confirm("Really delete all images? Click OK to confirm, cancel to NOT delete ALL images.")) {
+            var httpc = new XMLHttpRequest();
+            var url = "deleteallimages.php";        
+            httpc.open("POST", url, true);
+            httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+            httpc.send();//
+            document.getElementById("leftfeed").innerHTML = "";
+            
+        }
+    }
+    
+    document.getElementById("tableinput").onchange = function(){
+        var newurl = this.value;
+        var newimg = document.createElement("IMG");
+        newimg.src = newurl;
+        document.getElementById("leftfeed").appendChild(newimg);
+        externalurls.push(newurl);
+        data = encodeURIComponent(JSON.stringify(externalurls,null,"   "));
+        var httpc = new XMLHttpRequest();
+        var url = "filesaver.php";        
+        httpc.open("POST", url, true);
+        httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+        httpc.send("data="+data+"&filename=json/externalurls.txt");//send text to filesaver.php
+        
+    }
+    document.getElementById("inputlabel").onclick = function(){
+        if(document.getElementById("tableinput").value.length>1){
+            var newurl = document.getElementById("tableinput").value;
+            var newimg = document.createElement("IMG");
+            newimg.src = newurl;
+            document.getElementById("leftfeed").appendChild(newimg);
+            externalurls.push(newurl);
+            data = encodeURIComponent(JSON.stringify(externalurls,null,"   "));
+            var httpc = new XMLHttpRequest();
+            var url = "filesaver.php";        
+            httpc.open("POST", url, true);
+            httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+            httpc.send("data="+data+"&filename=json/externalurls.txt");//send text to filesaver.php   
+        }
+    }
+    
+    data = encodeURIComponent(JSON.stringify(localimages,null,"   "));
+    var httpc = new XMLHttpRequest();
+    var url = "filesaver.php";        
+    httpc.open("POST", url, true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+    httpc.send("data="+data+"&filename=json/localimages.txt");//send text to filesaver.php   
+    
+</script>

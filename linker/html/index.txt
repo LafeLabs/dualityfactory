@@ -1,0 +1,178 @@
+<style>
+#imagelinktable{
+    position:absolute;
+    top:150px;
+    left:50%;
+    z-index:3;
+}
+#imagelinktable img{
+    width:100px;
+    cursor:pointer;
+} 
+#imagelinktable input{
+    width:30em;
+    font-family:courier;
+    font-size:16px;
+} 
+
+.memebox{
+    width:100%;
+    position:absolute;
+    left:0px;
+    top:0px;
+    height:300%;
+    overflow:hidden;
+    margin-bottom:1em;
+    cursor:pointer;
+    z-index:3;
+    border:solid;
+}
+.bottomimage{
+    width:100%;
+    border:solid;
+    left:0px;
+    top:0px;
+    position:absolute;
+    z-index:-1;
+}
+.topimage{
+    position:absolute;
+    z-index:0;
+}
+</style>
+<script>
+
+feedwidth = 0.4*innerWidth;
+document.getElementById("imagelinktable").style.display = "block";
+document.getElementById("leftfeed").style.display = "block";
+document.getElementById("leftfeed").style.left = "0px";
+document.getElementById("leftfeed").style.overflow = "hidden";
+
+document.getElementById("leftfeed").style.width = (innerWidth*0.4).toString() + "px";
+inputmeme = JSON.parse(document.getElementById("memedatadiv").innerHTML);
+
+
+if(document.getElementById("linkdatadiv").innerHTML.length > 0){
+    linkdata = JSON.parse(document.getElementById("linkdatadiv").innerHTML);        
+}
+else{
+    linkdata = [];
+}
+linkdata.push("../../");
+
+dirarray = document.getElementById("mapslistdiv").innerHTML.split(",");
+for(var index = 0;index < dirarray.length;index++){
+    if(dirarray[index].length>0){
+        linkdata.push("maps/" + dirarray[index] + "/");
+    }
+}
+
+linkIndex = 0;
+
+linkindices = [];
+for(var bindex = 0;bindex < inputmeme.topimages.length;bindex++){
+    var newtr = document.createElement("TR");
+    var newtd = document.createElement("TD");
+    var newimg = document.createElement("IMG");
+    newimg.src = inputmeme.topimages[bindex].url;
+    newimg.id = "s" + bindex.toString();
+    newimg.className = "newsymbol";
+
+    newimg.onclick = function(){
+        var sid = parseInt(this.id.substr(1));
+        linkindices[sid]++;
+        if(linkindices[sid] > linkdata.length - 1){
+            linkindices[sid] = -1;
+            document.getElementById("i" + sid.toString()).value = "";
+        }
+        else{
+            document.getElementById("i" + sid.toString()).value = linkdata[linkindices[sid]];
+        }
+        redraw();
+    }
+    newtd.appendChild(newimg);
+    newtr.appendChild(newtd);
+    var newtd = document.createElement("TD");
+    newtr.appendChild(newtd);
+    var newinput = document.createElement("INPUT");
+    newtd.appendChild(newinput);
+    document.getElementById("imagelinktable").appendChild(newtr);
+    linkindices.push(-1);
+    newinput.id = "i" + bindex.toString();
+    newinput.onkeydown = function(e){
+        var inputid = parseInt(this.id.substr(1));
+        charCode = e.keyCode || e.which;
+        if(charCode == 046){
+            linkindices[inputid]++;
+            if(linkindices[inputid] > linkdata.length - 1){
+                linkindices[inputid] = -1;
+                this.value = "";
+            }
+            else{
+                this.value = linkdata[linkindices[inputid]];
+            }
+        }
+        if(charCode == 050){
+            linkindices[inputid]--;
+            if(linkindices[inputid] == -1){
+                this.value = "";
+            }
+            if(linkindices[inputid] == -2){
+                linkindices[inputid] = linkdata.length - 1;
+            }
+            if(linkindices[inputid] != -1){
+                this.value = linkdata[linkindices[inputid]];
+            }
+
+        }    
+        redraw();
+    }
+}
+
+
+newdiv = document.createElement("DIV");
+newdiv.className = "memebox";
+
+newdiv.style.width = (innerWidth*0.4).toString() + "px";
+
+document.getElementById("leftfeed").appendChild(newdiv);
+var newimg = document.createElement("IMG");
+newimg.style.width = (innerWidth*0.4).toString() + "px";
+newimg.src = inputmeme.imgurl;
+newimg.className = "bottomimage";
+newdiv.appendChild(newimg);
+
+newimg.onload = function(){
+    feedwidth = this.width;
+    for(var imgindex = 0;imgindex < inputmeme.topimages.length;imgindex++){
+        var newimg2 = document.createElement("img");
+        newimg2.className = "topimage";
+        newimg2.src = inputmeme.topimages[imgindex].url;
+        newimg2.style.width = (inputmeme.topimages[imgindex].woverw*feedwidth).toString() + "px";
+        newimg2.style.left = (inputmeme.topimages[imgindex].xoverw*feedwidth).toString() + "px";
+        newimg2.style.top = (inputmeme.topimages[imgindex].yoverw*feedwidth).toString() + "px";
+        newimg2.style.transform = "rotate(" + (inputmeme.topimages[imgindex].angle).toString() + "deg)";
+        newdiv.appendChild(newimg2);
+    }    
+}
+
+    
+
+
+function redraw(){
+    inputs = document.getElementById("imagelinktable").getElementsByTagName("INPUT");
+    for(var index = 0;index < inputmeme.topimages.length;index++){
+        inputmeme.topimages[index].href = inputs[index].value;
+    }
+
+    data = encodeURIComponent(JSON.stringify(inputmeme,null, "    "));
+    var httpc = new XMLHttpRequest();
+    var url = "filesaver.php";        
+    httpc.open("POST", url, true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+    httpc.send("data="+data+"&filename=json/linkedmeme.txt");//send text to filesaver.php
+}
+
+
+
+</script>

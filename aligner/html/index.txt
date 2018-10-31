@@ -1,0 +1,115 @@
+<script>
+
+imageslist = JSON.parse(document.getElementById("listdiv").innerHTML);
+
+document.getElementById("scalebar").style.display="block";
+document.getElementById("rotatebar").style.display="block";
+document.getElementById("bottomimage").style.display="block";
+document.getElementById("bottomsign").style.display="none";
+
+document.getElementById("bottomimage").style.height = (innerHeight - 234).toString() + "px";
+
+document.getElementById("bottomimage").src = imageslist[0];
+
+
+document.getElementById("bottomimage").onload = function(){
+    if(this.width > innerWidth){
+        var aspectRatio = this.width/this.height; 
+        this.width = innerWidth;
+        this.style.height = (this.width/aspectRatio).toString() + "px";
+        imageWidth = innerWidth;
+    }
+    else{
+        imageWidth = this.width;
+    }
+
+}
+
+
+imageIndex= 0;
+topimages = [];
+for(var index = 1;index < imageslist.length;index++){
+    var newimg = document.createElement("IMG");
+    newimg.src = imageslist[index];
+    newimg.className = "topimage";
+    document.getElementById("memebox").appendChild(newimg);
+    topimages.push(newimg);
+    newimg.style.width = "80px";
+    newimg.style.top = "80px";
+    newimg.style.left = (85*index).toString() + "px";
+    newimg.style.transform = "rotate(0deg)";
+}
+
+
+mc = new Hammer(document.getElementById("bottomimage"));
+mc.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+mc.on("panleft panright panup pandown tap press", function(ev) {
+    topimages[imageIndex].style.left = (ev.deltaX + 0.5*imageWidth).toString() + "px";
+    topimages[imageIndex].style.top = (ev.deltaY + 0.3*imageWidth).toString() + "px";
+    redraw();
+});    
+
+/*mcback = new Hammer(document.getElementById("imagebox"));
+mcback.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+mcback.on("panleft panright panup pandown tap press", function(ev) {
+    topimages[imageIndex].style.left = (ev.deltaX + 0.5*imageWidth).toString() + "px";
+    topimages[imageIndex].style.top = (ev.deltaY + 0.3*imageWidth).toString() + "px";
+});    */
+
+for(var index = 0;index < topimages.length;index++){
+    topimages[index].id = "i" + index.toString();
+    topimages[index].onclick = function(){
+        topimages[imageIndex].style.border = "none";
+        imageIndex = parseInt(this.id.substring(1));
+        topimages[imageIndex].style.border = "solid";
+    }
+}
+
+topimages[imageIndex].style.border = "solid";
+
+
+//pans = document.getElementById("pantable").getElementsByTagName("TD");
+
+
+mc1 = new Hammer(document.getElementById("scalebar"));
+mc1.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+mc1.on("panleft panright panup pandown tap press", function(ev) {
+    topimages[imageIndex].style.width = (ev.deltaX + 0.2*imageWidth).toString() + "px";
+    redraw();
+});
+
+mc2 = new Hammer(document.getElementById("rotatebar"));
+mc2.get('pan').set({ direction: Hammer.DIRECTION_ALL });
+mc2.on("panleft panright panup pandown tap press", function(ev) {
+    topimages[imageIndex].style.transform = "rotate(" + (ev.deltaX*Math.PI/10).toString() + "deg)";
+    redraw();
+});
+
+
+
+function redraw(){
+    
+    outjson = {};
+    outjson.imgurl = document.getElementById("bottomimage").src;
+    outjson.topimages = [];
+    for(var index = 0;index < topimages.length;index++){
+        var imgjson = {};
+        imgjson.url = topimages[index].src;
+        imgjson.xoverw = parseFloat(topimages[index].style.left)/imageWidth;
+        imgjson.yoverw = parseFloat(topimages[index].style.top)/imageWidth;
+        imgjson.woverw = parseFloat(topimages[index].style.width)/imageWidth;
+        imgjson.angle = parseFloat(topimages[index].style.transform.substr(7));
+        outjson.topimages.push(imgjson);
+    }
+    
+        data = encodeURIComponent(JSON.stringify(outjson,null,"    "));
+
+    var httpc = new XMLHttpRequest();
+    var url = "filesaver.php";        
+    httpc.open("POST", url, true);
+    httpc.setRequestHeader("Content-Type", "application/x-www-form-urlencoded;charset=utf-8");
+    httpc.send("data=" + data + "&filename=" + "json/currentmeme.txt");//send text to filesaver.php
+    
+}
+    
+</script>
